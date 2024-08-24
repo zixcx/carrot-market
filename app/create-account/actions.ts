@@ -13,7 +13,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import getSession from "@/lib/session";
 
-const checkUsername = (username: string) => !username.includes("null");
+const checkUsername = (username: string) => !username.includes("github");
 
 // const checkUniqueUsername = async (username: string) => {
 //     const user = await db.user.findUnique({

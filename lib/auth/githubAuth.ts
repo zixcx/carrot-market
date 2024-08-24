@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 
-// export function getGithubEmail() {}
+interface IGithubEmail {
+    email: string;
+    primary: boolean;
+}
 
 class GithubAuth {
     async getGithubToken(code: string) {
@@ -23,18 +26,32 @@ class GithubAuth {
         return access_token;
     }
     async getGithubUserData(access_token: string) {
-        const userProfileResponse = await fetch("https://api.github.com/user", {
+        const userData = await fetch("https://api.github.com/user", {
             headers: {
                 Authorization: `Bearer ${access_token}`,
             },
             cache: "no-cache",
         });
-        const { id, avatar_url, login } = await userProfileResponse.json();
+        const { id, avatar_url, login } = await userData.json();
         return {
-            id: `${id}`,
-            login,
+            github_id: `${id}`,
+            github_name: login,
             avatar_url,
         };
+    }
+    async getGithubEmail(access_token: string): Promise<string> {
+        const email = (
+            await (
+                await fetch("https://api.github.com/user/emails", {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                    },
+                    cache: "no-cache",
+                })
+            ).json()
+        ).find((el: IGithubEmail) => el.primary).email;
+
+        return email;
     }
 }
 

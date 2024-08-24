@@ -36,7 +36,7 @@ export default function SMSLogin() {
                         name="phone"
                         key={"phone"}
                         type="number"
-                        placeholder="전화번호"
+                        placeholder="010XXXXXXXX"
                         required
                         errors={state.error?.formErrors}
                     />
