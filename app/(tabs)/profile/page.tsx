@@ -1,4 +1,3 @@
-import Button from "@/components/button";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
 import { notFound, redirect } from "next/navigation";
@@ -28,7 +27,7 @@ export default async function Profile() {
         <div>
             <h1>Welcome! {user?.username}</h1>
             <form action={logOut}>
-                <Button text={"로그아웃"} />
+                <button>Log out</button>
             </form>
         </div>
     );
