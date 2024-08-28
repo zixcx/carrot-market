@@ -6,6 +6,7 @@ import Input from "@/components/input";
 import { useState } from "react";
 import { uploadProduct } from "./actions";
 import { formatToKRW } from "@/lib/utils";
+import { useFormState } from "react-dom";
 
 export default function AddProduct() {
     const [preview, setPreview] = useState("");
@@ -14,7 +15,7 @@ export default function AddProduct() {
             target: { files },
         } = event;
         if (!files || files.length === 0) {
-            // alert("파일을 선택해주세요.");
+            alert("파일을 선택해주세요.");
             return;
         }
         // if (files.length > 10) {
@@ -40,11 +41,14 @@ export default function AddProduct() {
         const numericValue = inputValue.replace(/[^\d]/g, "");
 
         setPrice(`₩ ${formatToKRW(Number(numericValue))}`);
+        console.log(Number(price.replace(/[₩,\s]/g, "")));
     };
+
+    const [state, action] = useFormState(uploadProduct, null);
 
     return (
         <div>
-            <form action={uploadProduct} className="p-5 flex flex-col gap-5">
+            <form action={action} className="p-5 flex flex-col gap-5">
                 <label
                     htmlFor="photo"
                     className="cursor-pointer border-2 aspect-square flex flex-col items-center justify-center text-neutral-300 border-neutral-300 rounded-md border-dashed bg-center bg-cover"
@@ -55,9 +59,17 @@ export default function AddProduct() {
                     {preview === "" ? (
                         <>
                             <UploadIcon className="w-20 fill-white" />
-                            <span className="text-sm mt-1">
-                                사진을 추가해 주세요.
-                            </span>
+
+                            {state?.fieldErrors.photo ? (
+                                <span className="text-red-500 font-medium mt-1">
+                                    사진을 추가해 주세요.
+                                </span>
+                            ) : (
+                                <span className="text-sm mt-1">
+                                    사진을 추가해 주세요.
+                                </span>
+                            )}
+
                             {/* <span className="text-sm">0/10</span> */}
                         </>
                     ) : null}
@@ -73,7 +85,13 @@ export default function AddProduct() {
                 />
 
                 <span className="text-sm -my-2">제목</span>
-                <Input name="title" type="text" placeholder="제목" required />
+                <Input
+                    name="title"
+                    type="text"
+                    placeholder="제목"
+                    required
+                    errors={state?.fieldErrors.title}
+                />
 
                 <span className="text-sm -my-2">가격</span>
                 <Input
@@ -83,6 +101,7 @@ export default function AddProduct() {
                     onChange={onPriceChange}
                     value={price}
                     required
+                    errors={state?.fieldErrors.price}
                 />
 
                 <span className="text-sm -my-2">자세한 설명</span>
@@ -91,6 +110,7 @@ export default function AddProduct() {
                     type="text"
                     placeholder="신뢰할 수 있는 거래를 위해 자세히 적어주세요."
                     required
+                    errors={state?.fieldErrors.description}
                 />
                 <Button text="등록하기" />
             </form>

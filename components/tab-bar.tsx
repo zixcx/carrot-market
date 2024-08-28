@@ -24,7 +24,7 @@ export default function TabBar() {
                 href="/products"
                 className="flex flex-col items-center gap-px"
             >
-                {pathname === "/products" ? (
+                {pathname === "/home" ? (
                     <SolidHomeIcon className="w-7 h-7" />
                 ) : (
                     <OutlineHomeIcon className="w-7 h-7" />
