@@ -1,4 +1,3 @@
-import ListProduct from "@/components/list-product";
 import ProductList from "@/components/product-list";
 import db from "@/lib/db";
 import Link from "next/link";
